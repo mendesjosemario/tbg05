@@ -12,6 +12,10 @@ Este projeto é uma implementação do clássico jogo Tetris, desenvolvido para 
   - `Espaço`: Rodar a peça.
 - **Objetivo**: O objetivo é completar linhas horizontais com os blocos que caem. Quando uma linha é completada, ela desaparece, e o jogador ganha pontos. O jogo termina quando os blocos se acumulam até o topo do quadro.
 
+## Interface Visual
+
+![Exemplo da Interface Visual](image_url)
+
 ## Funcionalidades
 - **Geração Aleatória de Peças**: O jogo gera peças de Tetris aleatoriamente.
 - **Sistema de Pontuação**: Pontos são atribuídos por cada linha completada.
