@@ -14,7 +14,7 @@ Este projeto é uma implementação do clássico jogo Tetris, desenvolvido para 
 
 ## Interface Visual
 
-![Exemplo da Interface Visual](image_url)
+![Exemplo da Interface Visual](https://github.com/mendesjosemario/tbg05/blob/main/Docs/IMG/Tetris%20_Interface.PNG)
 
 ## Funcionalidades
 - **Geração Aleatória de Peças**: O jogo gera peças de Tetris aleatoriamente.
