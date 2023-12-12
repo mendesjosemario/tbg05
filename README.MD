@@ -5,12 +5,12 @@ Este projeto é uma implementação do clássico jogo Tetris, desenvolvido para 
 
 ## Como Jogar
 - **Iniciar o Jogo**: Execute o arquivo `Tetris.java` para iniciar o jogo.
-- **Controlos**:
-  - `Seta para Esquerda`: Mover a peça para a esquerda.
-  - `Seta para Direita`: Mover a peça para a direita.
-  - `Seta para Baixo`: Acelerar a queda da peça.
-  - `Espaço`: Rodar a peça.
-- **Objetivo**: O objetivo é completar linhas horizontais com os blocos que caem. Quando uma linha é completada, ela desaparece, e o jogador ganha pontos. O jogo termina quando os blocos se acumulam até o topo do quadro.
+**Controlos**:
+  - 'Seta para Esquerda': Mover a peça para a esquerda.
+  - 'Seta para Direita': Mover a peça para a direita.
+  - 'Seta para Baixo': Acelerar a queda da peça.
+  - 'Espaço': Rodar a peça.
+**Objetivo** : O objetivo é completar linhas horizontais com os blocos que caem. Quando uma linha é completada, ela desaparece, e o jogador ganha pontos. O jogo termina quando os blocos se acumulam até o topo do quadro.
 
 ## Interface Visual
 
