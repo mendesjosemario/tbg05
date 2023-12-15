@@ -1,6 +1,7 @@
-## POO tbg05
+# POO tbg05
 
 ## Descrição
+
 Este projeto é uma implementação do clássico jogo Tetris, desenvolvido para a disciplina de Programação Orientada a Objetos. O jogo vai utilizar a linguagem de programação Java, com foco em demonstrar habilidades de programação orientada a objetos, manipulação de GUI e lógica de jogos.
 
 **Example**:
@@ -35,17 +36,16 @@ This project was developed by *Jose Mendes* (*a040866*@umaia.pt)  for POO 2023�
 
 ------
 
-#### ...
 
-**Problem in Context**
-
-...
-
-**The Pattern**
+### Problem in Context
 
 ...
 
-**Implementation**
+### The Pattern
+
+...
+
+### Implementation
 
 The following figure shows how the pattern’s roles were mapped to the application classes.
 
@@ -55,7 +55,7 @@ These classes can be found in the following files:
 
 - ...
 
-**Consequences**
+### Consequences
 
 The use of the State Pattern in the current design allows the following benefits:
 
