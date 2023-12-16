@@ -22,6 +22,10 @@ O projeto segue o padrão MVC (Model-View-Controller), dividindo a lógica do jo
 ### Estrutura de Diretórios
 A estrutura de diretórios do projeto é a seguinte:
 
+![Tetris UML Class Diagram](https://github.com/mendesjosemario/tbg05/blob/main/Docs/IMG/Diagrama_ER.PNG)
+
+
+
 ```bash
 directory_structure = """
 ├───.gradle
