@@ -1,5 +1,27 @@
-# Ignore Gradle project-specific cache directory
-.gradle
+# Diretórios de Build
+build/
+out/
 
-# Ignore Gradle build output directory
-build
+# Gradle
+.gradle/
+gradle/
+gradlew
+gradlew.bat
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Arquivos Temporários e Logs
+*.log
+*.tmp
+*.bak
+
+# Arquivos Compilados Java
+*.class
+
+# Arquivos JAR/WAR/EAR
+*.jar
+*.war
+*.ear
+
