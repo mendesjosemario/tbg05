@@ -1,85 +1,123 @@
-# POO tbg05
+# Tetris - Programação Orientada a Objetos
 
 ## Descrição
+Este projeto é uma implementação do clássico jogo Tetris, realizada como parte da disciplina de Programação Orientada a Objetos. O foco está em aplicar os princípios de programação orientada a objetos e desenvolver habilidades em Java, particularmente em relação à construção de interfaces gráficas e lógica de jogo.
 
-Este projeto é uma implementação do clássico jogo Tetris, desenvolvido para a disciplina de Programação Orientada a Objetos. O jogo vai utilizar a linguagem de programação Java, com foco em demonstrar habilidades de programação orientada a objetos, manipulação de GUI e lógica de jogos.
+Desenvolvido por: **Jose Mendes** (a040866@umaia.pt)
 
-**Example**:
+## Funcionalidades Implementadas
+- Estrutura de projeto base em Java com organização inicial dos diretórios.
+- Configuração inicial do ambiente de desenvolvimento e do sistema de build usando Gradle.
+- Criação de esqueletos iniciais para as classes principais do jogo (ainda sem implementação de lógica específica).
 
-In this exciting platform game you can ...... […].
+## Funcionalidades Planeadas
+- Implementação da lógica de movimentação e rotação das peças do Tetris.
+- Desenvolvimento da lógica para eliminação de linhas e pontuação.
+- Criação da interface gráfica do usuário para interação com o jogo.
+- Adição de controles para o usuário (teclado ou mouse).
 
-This project was developed by *Jose Mendes* (*a040866*@umaia.pt)  for POO 2023⁄24.
+## Arquitetura do Projeto
+O projeto segue o padrão MVC (Model-View-Controller), dividindo a lógica do jogo, a interface do usuário e o controle do jogo em partes separadas e interconectadas.
 
-### IMPLEMENTED FEATURES
+### Estrutura de Diretórios
+A estrutura de diretórios do projeto é a seguinte:
 
-> This section should contain a list of implemented features and their descriptions. In the end of the section, include two or three screenshots that illustrate the most important features.
+```bash
+directory_structure = """
+├───.gradle
+│   ├───7.4
+│   │   ├───checksums
+│   │   ├───dependencies-accessors
+│   │   ├───executionHistory
+│   │   ├───fileChanges
+│   │   ├───fileHashes
+│   │   └───vcsMetadata
+│   ├───buildOutputCleanup
+│   └───vcs-1
+├───.idea
+│   ├───codeStyles
+│   ├───inspectionProfiles
+│   └───modules
+│       └───app
+├───.run
+├───app
+│   ├───build
+│   │   ├───classes
+│   │   │   └───java
+│   │   │       ├───main
+│   │   │       │   └───Tetris
+│   │   │       │       ├───controller
+│   │   │       │       ├───model
+│   │   │       │       └───view
+│   │   │       └───test
+│   │   │           └───Tetris
+│   │   ├───distributions
+│   │   ├───generated
+│   │   │   └───sources
+│   │   │       ├───annotationProcessor
+│   │   │       │   └───java
+│   │   │       │       ├───main
+│   │   │       │       └───test
+│   │   │       └───headers
+│   │   │           └───java
+│   │   │               ├───main
+│   │   │               └───test
+│   │   ├───libs
+│   │   ├───reports
+│   │   │   └───tests
+│   │   │       └───test
+│   │   │           ├───classes
+│   │   │           ├───css
+│   │   │           ├───js
+│   │   │           └───packages
+│   │   ├───resources
+│   │   │   ├───main
+│   │   │   └───test
+│   │   ├───scripts
+│   │   ├───test-results
+│   │   │   └───test
+│   │   │       └───binary
+│   │   └───tmp
+│   │       ├───compileJava
+│   │       ├───compileTestJava
+│   │       ├───jar
+│   │       └───test
+│   └───src
+│       ├───main
+│       │   ├───java
+│       │   │   └───Tetris
+│       │   │       ├───controller
+│       │   │       ├───model
+│       │   │       └───view
+│       │   └───resources
+│       └───test
+│           ├───java
+│           │   └───Tetris
+│           └───resources
+├───build
+│   ├───classes
+│   │   └───java
+│   ├───distributions
+│   ├───libs
+│   ├───resources
+│   ├───scripts
+│   └───tmp
+│       └───jar
+├───Docs
+│   └───IMG
+└───gradle
+└───wrapper
+"""
+```
+## Tecnologias Utilizadas
+- Java
+- Gradle para gestao de dependências e build
 
-**Examples**:
+## Como Executar
+Instruções para clonar o repositório, compilar e executar o jogo (a serem adicionadas conforme o avanço do desenvolvimento).
 
-- **Swap position** - ...
-- **Turn left or rigth** - ...
+## Licença
+Informações sobre a licença do projeto.
 
-### PLANNED FEATURES
-
-> ...
-
-### DESIGN
-
-> ... :
-
-- **Problem in Context.** ... [link to the relevant lines of code](https://help.github.com/en/articles/creating-a-permanent-link-to-a-code-snippet) in the appropriate version.
-- **The Pattern.** ...
-- **Implementation.** Show how the pattern roles, operations and associations were mapped to the concrete design classes. Illustrate it with a UML class diagram, and refer to the corresponding source code with links to the relevant lines (these should be [relative links](https://help.github.com/en/articles/about-readmes#relative-links-and-image-paths-in-readme-files). When doing this, always point to the latest version of the code.
-- **Consequences.** Benefits and liabilities of the design after the pattern instantiation, eventually comparing these consequences with those of alternative solutions.
-
-**Example of one of such subsections**:
-
-------
-
-
-### Problem in Context
-
-...
-
-### The Pattern
-
-...
-
-### Implementation
-
-The following figure shows how the pattern’s roles were mapped to the application classes.
-
-![img](https://www.f...svg)
-
-These classes can be found in the following files:
-
-- ...
-
-### Consequences
-
-The use of the State Pattern in the current design allows the following benefits:
-
-- ...
-- ...
-- ....
-
-#### KNOWN CODE SMELLS AND REFACTORING SUGGESTIONS
-
-> ...
-
-**Example of such a subsection**:
-
-------
-
-#### DATA CLASS
-
-...
-
-### TESTING
-
-- Screenshot of coverage report...
-- Link to mutation testing report...
-
-### SELF-EVALUATION
-
-> ...
+## Status do Projeto
+O projeto está em desenvolvimento ativo. Ainda não há uma versão funcional disponível.
