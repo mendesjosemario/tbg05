@@ -19,12 +19,13 @@ Desenvolvido por: **Jose Mendes** (a040866@umaia.pt)
 ## Arquitetura do Projeto
 O projeto segue o padrão MVC (Model-View-Controller), dividindo a lógica do jogo, a interface do usuário e o controle do jogo em partes separadas e interconectadas.
 
-### Estrutura de Diretórios
-A estrutura de diretórios do projeto é a seguinte:
+
+### Diagrama de Classes
 
 ![Tetris UML Class Diagram](https://github.com/mendesjosemario/tbg05/blob/main/Docs/IMG/Diagrama_ER.PNG)
 
 
+### Estrutura de Diretórios
 
 ```bash
 directory_structure = """
