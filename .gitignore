@@ -1,0 +1,31 @@
+# Diretórios de Build do Gradle e IntelliJ
+build/
+out/
+.gradle/
+
+# Arquivos específicos do Gradle
+gradlew
+gradlew.bat
+gradle-wrapper.jar
+gradle-wrapper.properties
+
+# Configurações do IntelliJ IDEA
+.idea/
+*.iml
+
+# Arquivos e diretórios de log
+*.log
+*.tmp
+*.bak
+
+# Arquivos compilados Java
+*.class
+
+# Arquivos de pacote
+*.jar
+*.war
+*.ear
+
+# Outros arquivos e diretórios que podem ser gerados e não devem ser rastreados
+*.swp
+.DS_Store
