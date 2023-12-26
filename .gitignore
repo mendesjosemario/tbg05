@@ -1,17 +1,17 @@
 # Diretórios de Build
 build/
 out/
-
+!gradle/wrapper/gradle-wrapper.jar # Permitir o jar do Gradle Wrapper
 
 # Gradle
 .gradle/
-gradle/
-gradlew
-gradlew.bat
+!gradle/wrapper/gradle-wrapper.properties # Permitir o properties do Gradle Wrapper
 
 # IntelliJ IDEA
 .idea/
 *.iml
+*.iws
+*.ipr
 
 # Arquivos Temporários e Logs
 *.log
@@ -21,8 +21,27 @@ gradlew.bat
 # Arquivos Compilados Java
 *.class
 
-# Arquivos JAR/WAR/EAR
+# Arquivos de Pacote
 *.jar
 *.war
 *.ear
+*.zip
+*.tar
 
+# Arquivos de distribuição gerados pelo Gradle
+app/build/distributions/
+build/distributions/
+
+# Outros arquivos e diretórios a ignorar
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# Arquivos específicos do sistema
+**/.DS_Store
+**/Thumbs.db
+
+# Pastas de teste binário
+**/test-results/
+**/binary/
