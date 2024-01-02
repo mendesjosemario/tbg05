@@ -3,6 +3,7 @@ build/
 out/
 !gradle/wrapper/gradle-wrapper.jar # Permitir o jar do Gradle Wrapper
 
+
 # Gradle
 .gradle/
 !gradle/wrapper/gradle-wrapper.properties # Permitir o properties do Gradle Wrapper
