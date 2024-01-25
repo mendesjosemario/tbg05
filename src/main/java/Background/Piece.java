@@ -1,6 +1,10 @@
 package Background;
 
 
+import com.googlecode.lanterna.TerminalPosition;
+import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.graphics.TextGraphics;
+
 import java.util.Random;
 
 
@@ -19,6 +23,26 @@ public class Piece {
         matrix = state.getMatrix();
     }
 
+    public void update() {
+        this.matrix = getMatrix();
+        this.state = getState();
+        this.pos_x = getPos_x();
+        this.pos_y = getPos_y();
+    }
+
+    public void draw(TextGraphics screen, GameController gameController){
+        update();
+        screen.setBackgroundColor(TextColor.Factory.fromString(state.getColor()));
+
+        for (int y = 0; y < matrix.length; y++) {
+            for (int x = 0; x < matrix[y].length * 2; x += 2) {
+                if (!"#000000".equals(matrix[y][x / 2])){
+                    screen.putString(new TerminalPosition(pos_x * 2 + x + gameController.getGameScreenXoffset(), pos_y + y + gameController.getGameScreenYoffset()), " ");
+                    screen.putString(new TerminalPosition(pos_x * 2 + x + 1 + gameController.getGameScreenXoffset(), pos_y + y + gameController.getGameScreenYoffset()), " ");
+                }
+            }
+        }
+    }
     private void getRandomState(){
         Random random = new Random();
         int x = random.nextInt(7);

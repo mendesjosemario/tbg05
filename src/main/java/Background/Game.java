@@ -15,25 +15,53 @@ import java.io.IOException;
 
 
 public class Game {
+    public TerminalHandler getTerminalHandler() {
+        return terminalHandler;
+    }
+
     private final TerminalHandler terminalHandler;
-    private Screen screen;
+
+
+
+
+    private final Screen screen;
+
+    private final GameController gameController;
     private GameState currentState ;
     private boolean isPaused = false;  // Rastreia se o jogo está pausado
-    protected Piece piece;
-    protected  Piece nextPiece;
-    protected static final int gameScreenXoffset = 6;
-    protected static final int gameScreenYoffset = 2;
-    protected static final int gameScreenWidth = 26;
-    protected static final int gameScreenLength = 26;
-    protected int gameSpeed = 5;  //smaller is faster, ticks needed to force piece down
-    protected int nTickCounter = 0;
-    protected Score score;
-    private Arena arena;
+
+
+    private Piece piece;
+    private  Piece nextPiece;
+
+    public int getGameScreenXoffset() {
+        return gameScreenXoffset;
+    }
+
+    public int getGameScreenYoffset() {
+        return gameScreenYoffset;
+    }
+
+    public int getGameScreenWidth() {
+        return gameScreenWidth;
+    }
+
+
+    private  final int gameScreenXoffset = 6;
+    private  final int gameScreenYoffset = 2;
+    private  final int gameScreenWidth = 26;
+    private final int gameScreenLength = 26;
+    private final int gameSpeed = 5;  //smaller is faster, ticks needed to force piece down
+    private int nTickCounter = 0;
+    private final Score score;
+    private final Arena arena;
     public Game(TerminalHandler terminalHandler) throws IOException {
         this.terminalHandler = terminalHandler;
         Terminal terminal = terminalHandler.getTerminal();
         this.arena = new Arena(gameScreenWidth, gameScreenLength);
         this.screen = new TerminalScreen(terminal);
+        this.gameController = new GameController(screen, this);
+        this.score = new Score();
         currentState = GameState.MENU;
         screen.startScreen();
     }
@@ -41,32 +69,32 @@ public class Game {
     public void start() throws IOException {
         while (true) {
             switch (currentState) {
-                case MENU:
+                case MENU -> {
                     screen.clear();
                     drawMenu();
                     handleGameplayInput();
-                    break;
-                case INSTRUCTIONS:
+                }
+                case INSTRUCTIONS -> {
                     screen.clear();
                     drawInstructions();
                     handleGameplayInput();
-                    break;
-                case PLAYING:
+                }
+                case PLAYING -> {
                     screen.clear();
                     arena.setRunning(true);
-                    arena.drawArena(screen);
+                    arena.drawArena(screen, gameController);
                     handleGameplayInput();
-                    break;
-                case PAUSED:
+                }
+                case PAUSED -> {
                     screen.clear();
-                    currentState=GameState.PAUSED;
+                    currentState = GameState.PAUSED;
                     drawMenu();
                     handleGameplayInput();
-                    break;
+                }
             }
             if (currentState == GameState.QUIT) {
                 arena.setRunning(false);
-                break; // Se o jogo estiver pausado (estado PAUSED), sai do loop
+                break;
             }
         }
 
@@ -108,18 +136,10 @@ public class Game {
                     isPaused = true;
                     // Adicionar lógica para mostrar a tela de pausa, se necessário
                 }
-            } else if (key.getKeyType() == KeyType.ArrowLeft) {
-                // Lógica para mover o tetromino para esquerda
-            } else if (key.getKeyType() == KeyType.ArrowRight) {
-                // Lógica para mover o tetromino para direita
             } if (key.getKeyType() == KeyType.Character) {
                 switch (key.getCharacter()) {
-                    case '1':
-                        currentState = GameState.PLAYING;
-                        break;
-                    case '2':
-                        currentState = GameState.INSTRUCTIONS;
-                        break;
+                    case '1' -> currentState = GameState.PLAYING;
+                    case '2' -> currentState = GameState.INSTRUCTIONS;
                 }
             }
             if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') {
@@ -185,23 +205,8 @@ public class Game {
     public Arena getBoard() {
         return arena;
     }
-    public Score getScore() { return score; }
-    public int getGameSpeed() {
-        return gameSpeed;
-    }
-    public int getTickCount() {
-        return nTickCounter;
-    }
+
     public boolean gameOver(){return arena.gameOver();}
-    public void increaseGameSpeed(){
-        if(gameSpeed>1){
-            gameSpeed--;
-        }
-    }
-    public void decreaseGameSpeed(){
-        if(gameSpeed<10){
-            gameSpeed++;
-        }
-    }
+
 
 }

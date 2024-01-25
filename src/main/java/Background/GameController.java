@@ -13,7 +13,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
-public class GameController extends Game{
+public class GameController {
     private static volatile boolean leftPressed = false;
     private static volatile boolean rightPressed = false;
     private static volatile boolean upPressed = false;
@@ -31,10 +31,10 @@ public class GameController extends Game{
     private Score scoreView;
     private NextPiece nextPieceView;
 
-    public GameController(Screen scr) {
-        game = new Game();
-        boardview = new Arena(game.getBoard());
-        scoreView = new Score(game.getScore());
+    public GameController(Screen scr, Game game) throws IOException {
+        this.game = game;
+        boardview = new Arena(game.getBoard().getWidth(), game.getBoard().getLength());
+        scoreView = new Score();
         screen = scr;
         //setup();
     }
@@ -72,7 +72,7 @@ public class GameController extends Game{
 
             //Game Logic
             if (game.isPieceNull()) {
-                pieceview = new Piece(game.getPiece());
+                pieceview = new Piece(game.getPiece().pos_x);
                 nextPieceView = new NextPiece(game.getNextPiece());
             }
             game.nextTick();
@@ -103,25 +103,23 @@ public class GameController extends Game{
 
         scoreView.draw(screenGraphics);
         nextPieceView.draw(screenGraphics);
-        boardview.draw(screenGraphics);
-        pieceview.draw(screenGraphics);
+        boardview.drawArena(screen, this);
+        pieceview.draw(screenGraphics, this);
 
         screen.refresh();
     }
-
-    public static int getGameScreenXoffset() {
-        return gameScreenXoffset;
+    public int getGameScreenXoffset() {
+        return game.getGameScreenXoffset();
     }
-    public static int getGameScreenYoffset() {
-        return gameScreenYoffset;
+    public int getGameScreenYoffset() {
+        return game.getGameScreenYoffset();
     }
-    public static int getGameScreenWidth() {
-        return gameScreenWidth / 2;
+    public  int getGameScreenWidth() {
+        return game.getGameScreenWidth() / 2;
     }
-    public static int getGameScreenLength() {
-        return gameScreenWidth;
+    public  int getGameScreenLength() {
+        return game.getGameScreenWidth();
     }
-
     public void sendInputToModel() throws IOException {
         if (isLeftPressed()) {
             game.pressedLeft();

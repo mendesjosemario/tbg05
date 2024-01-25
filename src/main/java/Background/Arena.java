@@ -157,7 +157,7 @@ public class Arena {
         return false;
     }
 
-    public void drawArena(Screen screen) throws IOException {
+    public void drawArena(Screen screen, GameController gameController) throws IOException {
         TerminalSize size = screen.getTerminalSize();
         int arenaWidth = 60;
         int arenaHeight = 30;
@@ -183,11 +183,10 @@ public class Arena {
         }
         for (int y = 0; y < length; y++){
             for (int x = 0; x < width*2; x+=2){
-                screen.setBackgroundColor(TextColor.Factory.fromString(matrix[y][x/2]));
+                textGraphics.setBackgroundColor(TextColor.Factory.fromString(matrix[y][x/2]));
                 //TODO REMOVE LINE (on to debug)
-                screen.putString(new TerminalPosition(x + GameController.getGameScreenXoffset(), y + GameController.getGameScreenYoffset()), " ");
-                //screen.putString(new TerminalPosition(x + ldts.model.Game.getGameScreenXoffset(), y + ldts.model.Game.getGameScreenYoffset()), ' ');
-                screen.putString(new TerminalPosition(x+1 + GameController.getGameScreenXoffset(), y + GameController.getGameScreenYoffset()), " ");
+                textGraphics.putString(new TerminalPosition(x + gameController.getGameScreenXoffset(), y + gameController.getGameScreenYoffset()), " ");
+                textGraphics.putString(new TerminalPosition(x+1 + gameController.getGameScreenXoffset(), y + gameController.getGameScreenYoffset()), " ");
             }
         }
 
