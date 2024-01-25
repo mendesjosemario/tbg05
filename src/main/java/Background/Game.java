@@ -19,12 +19,20 @@ public class Game {
     private Screen screen;
     private GameState currentState ;
     private boolean isPaused = false;  // Rastreia se o jogo está pausado
-
+    protected Piece piece;
+    protected  Piece nextPiece;
+    protected static final int gameScreenXoffset = 6;
+    protected static final int gameScreenYoffset = 2;
+    protected static final int gameScreenWidth = 26;
+    protected static final int gameScreenLength = 26;
+    protected int gameSpeed = 5;  //smaller is faster, ticks needed to force piece down
+    protected int nTickCounter = 0;
+    protected Score score;
     private Arena arena;
     public Game(TerminalHandler terminalHandler) throws IOException {
         this.terminalHandler = terminalHandler;
         Terminal terminal = terminalHandler.getTerminal();
-        this.arena = new Arena();
+        this.arena = new Arena(gameScreenWidth, gameScreenLength);
         this.screen = new TerminalScreen(terminal);
         currentState = GameState.MENU;
         screen.startScreen();
@@ -118,6 +126,81 @@ public class Game {
                 currentState = GameState.QUIT;
             }
             // Adicionar lógica para outras teclas durante o jogo
+        }
+    }
+    public void nextTick(){
+        score.addToScore(arena.checkLineCompletition(new RemoveLine()));
+        if (nTickCounter == gameSpeed) {
+            if (arena.hasHitBottom(piece))
+                piece = null;
+            else
+                piece.forceDown();
+            nTickCounter = 0;
+        } else {
+            nTickCounter++;
+        }
+    }
+    public boolean isPieceNull(){
+        if(nextPiece == null && piece == null){
+            piece = new Piece(gameScreenWidth/4);
+            nextPiece = new Piece(gameScreenWidth/4);
+            return true;
+        }
+        if (piece == null) {
+            piece = nextPiece;
+            nextPiece = null;
+            nextPiece = new Piece(gameScreenWidth/4);
+            return true;
+        }
+        return false;
+    }
+
+    public void pressedLeft(){
+        if (piece!=null && piece.getPos_x()>0 && arena.canMove(piece.getPos_x()-1, piece))
+            piece.moveLeft();
+    }
+    public void pressedRight(){
+        if (piece!=null && piece.getRightPos()<gameScreenWidth/2-1 && arena.canMove(piece.getPos_x()+1, piece))
+            piece.moveRight();
+    }
+    public void pressedDown(){
+        if(piece==null) return;
+
+        if(arena.hasHitBottom(piece))
+            piece = null;
+        else
+            piece.forceDown();
+        nTickCounter = 0;
+    }
+    public void pressedUp(){
+        if(piece!=null && arena.canRotate(piece)){
+            piece.rotate();
+        }
+    }
+
+    public Piece getPiece() {
+        return piece;
+    }
+    public Piece getNextPiece(){return nextPiece;}
+    public Arena getBoard() {
+        return arena;
+    }
+    public Score getScore() { return score; }
+    public int getGameSpeed() {
+        return gameSpeed;
+    }
+    public int getTickCount() {
+        return nTickCounter;
+    }
+    public boolean gameOver(){return arena.gameOver();}
+    public void increaseGameSpeed(){
+        if(gameSpeed>1){
+            gameSpeed--;
+        }
+    }
+    public void decreaseGameSpeed(){
+        if(gameSpeed<10){
+            gameSpeed++;
         }
     }
 
