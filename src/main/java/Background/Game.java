@@ -20,47 +20,38 @@ public class Game {
     private final TerminalHandler terminalHandler;
 
 
-
+    public Screen getScreen() {
+        return screen;
+    }
 
     private final Screen screen;
-
-    private final GameController gameController;
     private GameState currentState ;
     private boolean isPaused = false;  // Rastreia se o jogo está pausado
-
-
-    private Piece piece;
-    private  Piece nextPiece;
-
-    public int getGameScreenXoffset() {
-        return gameScreenXoffset;
-    }
-
-    public int getGameScreenYoffset() {
-        return gameScreenYoffset;
-    }
-
-    public int getGameScreenWidth() {
-        return gameScreenWidth;
-    }
-
-
-    private  final int gameScreenXoffset = 6;
+    private  NextPiece nextPiece;
+    private  final int gameScreenXoffset = 2;
     private  final int gameScreenYoffset = 2;
     private  final int gameScreenWidth = 100;
     private final int gameScreenLength = 65;
     private final int gameSpeed = 5;  //smaller is faster, ticks needed to force piece down
     private int nTickCounter = 0;
+
+    public Score getScore() {
+        return score;
+    }
+
     private final Score score;
+
+    public Arena getArena() {
+        return arena;
+    }
+
     private final Arena arena;
     public Game(TerminalHandler terminalHandler) throws IOException {
         this.terminalHandler = terminalHandler;
         Terminal terminal = terminalHandler.getTerminal();
-        this.arena = new Arena(gameScreenWidth, gameScreenLength);
+        this.arena = new Arena(gameScreenWidth, gameScreenLength, gameScreenXoffset,gameScreenYoffset);
         this.screen = new TerminalScreen(terminal);
-        this.gameController = new GameController(screen, this);
         this.score = new Score();
-        this.piece = arena.getModel();
         currentState = GameState.MENU;
         screen.startScreen();
     }
@@ -79,8 +70,11 @@ public class Game {
                     handleGameplayInput();
                 }
                 case PLAYING -> {
+                    screen.clear();
                     arena.setRunning(true);
-                    arena.drawArena(screen.newTextGraphics(), screen ,  gameController);
+                    arena.update();
+                    arena.drawArena(screen, gameScreenXoffset, gameScreenWidth, gameScreenYoffset, gameScreenLength);
+                    nextTick();  // Adicione esta linha para avançar o jogo
                     handleGameplayInput();
                 }
                 case PAUSED -> {
@@ -91,6 +85,7 @@ public class Game {
                 }
             }
             if (currentState == GameState.QUIT) {
+                System.exit(0);
                 arena.setRunning(false);
                 break;
             }
@@ -110,7 +105,9 @@ public class Game {
         screen.refresh();
     }
 
-
+    public void update() {
+        arena.update();
+    }
 
     private void drawInstructions() throws IOException {
         TextGraphics textGraphics = screen.newTextGraphics();
@@ -132,7 +129,6 @@ public class Game {
                     currentState = GameState.PAUSED;
                 } else {
                     isPaused = true;
-                    // Adicionar lógica para mostrar a tela de pausa, se necessário
                 }
             } if (key.getKeyType() == KeyType.Character) {
                 switch (key.getCharacter()) {
@@ -140,8 +136,24 @@ public class Game {
                     case '2' -> currentState = GameState.INSTRUCTIONS;
                 }
             }
+            if (key.getKeyType() == KeyType.ArrowDown) {
+                pressedDown();
+            }
+            if (key.getKeyType() == KeyType.ArrowLeft) {
+                pressedLeft();
+            }
+            if (key.getKeyType() == KeyType.ArrowRight) {
+                pressedRight();
+            }
+            if (key.getKeyType() == KeyType.Character && key.getCharacter() == ' ') {
+                pressedUp();
+            }
             if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') {
                 currentState = GameState.QUIT;
+            }
+            if (key.getKeyType() == KeyType.EOF) {
+                arena.setRunning(false);
+                System.exit(0);
             }
             // Adicionar lógica para outras teclas durante o jogo
         }
@@ -150,68 +162,80 @@ public class Game {
         score.addToScore(arena.checkLineCompletition(new RemoveLine()));
 
         if (nTickCounter == gameSpeed) {
-            if (arena.hasHitBottom(piece)) {
-                piece = createNewPiece(); // Criar uma nova peça
+            if (arena.hasHitBottom(arena.getModel())) {
+                arena.setModel(createNewPiece()); // Criar uma nova peça
             } else {
-                piece.forceDown(); // Mover a peça para baixo
+                arena.getModel().forceDown();
             }
             nTickCounter = 0;
         } else {
             nTickCounter++;
         }
     }
-
-
     private Piece createNewPiece() {
-        piece = new Piece(gameScreenWidth/2, gameScreenLength/2);
-        return piece;
+        int initialX = (gameScreenWidth - arena.getWidth()) / 2;
+        arena.setModel(new Piece(initialX));
+        return arena.getModel();
     }
-
-
-
-
     public boolean isPieceNull(){
-        if(nextPiece == null && piece == null){
-            piece = new Piece(gameScreenWidth/4, gameScreenLength/4);
-            nextPiece = new Piece(gameScreenWidth/4, gameScreenLength/4);
+        if(nextPiece == null && arena.getModel() == null){
+            arena.setModel(new Piece(gameScreenWidth/4));
+            nextPiece = new NextPiece(new Piece(gameScreenWidth/4));
             return true;
         }
-        if (piece == null) {
-            piece = nextPiece;
+        if (arena.getModel() == null) {
+            arena.setModel(nextPiece.getModel());
             nextPiece = null;
-            nextPiece = new Piece(gameScreenWidth/4, gameScreenLength/4);
+            nextPiece = new NextPiece(new Piece(gameScreenWidth/4));
             return true;
         }
         return false;
     }
 
     public void pressedLeft(){
-        if (piece!=null && piece.getPos_x()>0 && arena.canMove(piece.getPos_x()-1, piece))
-            piece.moveLeft();
+        if (arena.getModel()!=null && arena.getModel().getPos_x()>0 && arena.canMove(arena.getModel().getPos_x()-1, arena.getModel()))
+            arena.getModel().moveLeft();
     }
     public void pressedRight(){
-        if (piece!=null && piece.getRightPos()<gameScreenWidth/2-1 && arena.canMove(piece.getPos_x()+1, piece))
-            piece.moveRight();
+        if (arena.getModel()!=null && arena.getModel().getRightPos()<gameScreenWidth/2-1 && arena.canMove(arena.getModel().getPos_x()+1, arena.getModel()))
+            arena.getModel().moveRight();
     }
-    public void pressedDown(){
-        if(piece==null) return;
+    public int getGameScreenLength() {
+        return gameScreenLength;
+    }
 
-        if(arena.hasHitBottom(piece))
-            piece = null;
+    public int getGameScreenXoffset() {
+        return gameScreenXoffset;
+    }
+
+    public int getGameScreenYoffset() {
+        return gameScreenYoffset;
+    }
+
+    public int getGameScreenWidth() {
+        return gameScreenWidth;
+    }
+
+    public void pressedDown(){
+        if(arena.getModel()==null) return;
+
+        if(arena.hasHitBottom(arena.getModel()))
+            arena.setModel(null);
         else
-            piece.forceDown();
+            arena.getModel().forceDown();
         nTickCounter = 0;
     }
     public void pressedUp(){
-        if(piece!=null && arena.canRotate(piece)){
-            piece.rotate();
+        if(arena.getModel()!=null && arena.canRotate(arena.getModel())){
+            arena.getModel().rotate();
         }
     }
 
+
     public Piece getPiece() {
-        return piece;
+        return arena.getModel();
     }
-    public Piece getNextPiece(){return nextPiece;}
+    public Piece getNextPiece(){return nextPiece.getModel();}
     public Arena getBoard() {
         return arena;
     }

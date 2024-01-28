@@ -11,13 +11,6 @@ import com.googlecode.lanterna.screen.Screen;
 import java.io.IOException;
 
 public class Arena {
-    public Piece getModel() {
-        return model;
-    }
-
-    public void setModel(Piece model) {
-        this.model = model;
-    }
 
     private Piece model;
     private String[][] matrix;
@@ -25,20 +18,20 @@ public class Arena {
     private int length;
     private boolean isRunning=false;
 
-    public Arena(int width, int length){
-        this.model = new Piece(width, 0);
-        width = width/2;
-        this.width = width;
+    public Arena(int width, int length, int gameOffsetX, int gameOfsetY) {
+        this.model = new Piece(50);
+        this.width = width ;  // Remova a linha "width = width/2;"
         this.length = length;
 
         matrix = new String[length][width];
 
-        for (int y = 0; y < length; y++){
-            for (int x = 0; x < width; x++){
+        for (int y = 0; y < length; y++) {
+            for (int x = 0; x < width; x++) {
                 matrix[y][x] = "#000000";
             }
         }
     }
+
 
 
     public boolean canMove(int nextPosX, Piece piece) {
@@ -78,17 +71,13 @@ public class Arena {
 
     }
 
-    public boolean hasHitBottom(Piece piece){
-        for(int y =0; y<piece.getMatrix().length; y++){
-            for (int x = 0; x <piece.getMatrix()[y].length; x++){
-                if(piece.getMatrix()[y][x]!="#000000") {
-                    if(y+piece.getPos_y()+1 == matrix.length){
+    public boolean hasHitBottom(Piece piece) {
+        for (int y = piece.getMatrix().length - 1; y >= 0; y--) {
+            for (int x = 0; x < piece.getMatrix()[y].length; x++) {
+                if (piece.getMatrix()[y][x] != "#000000") {
+                    int posY = piece.getPos_y() + y;
+                    if (posY + 1 == matrix.length || matrix[posY + 1][x + piece.getPos_x()] != "#000000") {
                         System.out.println("Chegou ao Fundo");
-                        addPiece(piece);
-                        return true;
-                    }
-                    else if(matrix[y+piece.getPos_y()+1][x+ piece.getPos_x()]!="#000000"){
-                        System.out.println("Colisão com peça");
                         addPiece(piece);
                         return true;
                     }
@@ -98,16 +87,23 @@ public class Arena {
         return false;
     }
 
+
     public void addPiece(Piece piece){
-        for(int y =0; y<piece.getMatrix().length;y++){
-            for(int x=0; x<piece.getMatrix()[y].length;x++){
-                if(piece.getMatrix()[y][x] != "#00000"){
-                    matrix[y+piece.getPos_y()][x+ piece.getPos_x()] = piece.getMatrix()[y][x];
+        for(int y = 0; y < piece.getMatrix().length; y++){
+            for(int x = 0; x < piece.getMatrix()[y].length; x++){
+                int targetY = y + piece.getPos_y();
+                int targetX = x + piece.getPos_x();
+
+                // Verifica se as posições calculadas estão dentro dos limites da matriz
+                if(targetY >= 0 && targetY < matrix.length && targetX >= 0 && targetX < matrix[targetY].length){
+                    if(piece.getMatrix()[y][x] != "#00000"){
+                        matrix[targetY][targetX] = piece.getMatrix()[y][x];
+                    }
                 }
             }
         }
-
     }
+
 
     public int checkLineCompletition(RemoveLine remover){
         int counter = 0;
@@ -160,37 +156,93 @@ public class Arena {
         // Verifica se a posição (x, y) está ocupada
         return false;
     }
-    public void update(){
-        this.matrix = model.getMatrix();
-        this.length = model.getLength();
+    public void update() {
+        if (isRunning && !hasHitBottom(model)) {
+            model.forceDown();
+        }
     }
-    public void drawArena(TextGraphics textGraphics, Screen screen, GameController gameController) throws IOException {
-        textGraphics = screen.newTextGraphics();
-        textGraphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
-        textGraphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width*2, length*2),' ');
-        textGraphics.setForegroundColor(TextColor.ANSI.GREEN);
 
+    public void drawArena(Screen screen, int gameScreenXoffset, int gameScreenWidth, int gameScreenYoffset, int gameScreenLength) throws IOException {
+        TextGraphics textGraphics = screen.newTextGraphics();
 
-        // Desenha os blocos estáticos da arena
-        for (int y = 0; y < length; y++) {
-            for (int x = 0; x < width; x++) {
-                String colorCode = matrix[y][x];
-                textGraphics.setBackgroundColor(TextColor.Factory.fromString(colorCode));
-                textGraphics.putString(new TerminalPosition(y*2, x*2), "  ");
-            }
-        }
+        // Desenha o contorno da arena
+        drawArenaBorder(textGraphics, gameScreenWidth, gameScreenYoffset, gameScreenLength);
 
-        // Desenha a peça atual
-        if (model != null) {
-            model.draw(textGraphics, gameController);
-        }
+        // Atualiza o estado da arena e da peça
+        update();
 
+        // Desenha as peças já colocadas na matriz
+        drawPlacedPieces(textGraphics, gameScreenXoffset, gameScreenYoffset);
+
+        // Desenha a peça em movimento
+        drawMovingPiece(textGraphics, gameScreenWidth ,gameScreenXoffset, gameScreenYoffset);
+
+        // Atualiza a tela
         screen.refresh();
     }
+    private void drawArenaBorder(TextGraphics textGraphics, int gameScreenWidth, int gameScreenYoffset, int gameScreenLength) {
+        // Calcula a posição do canto superior esquerdo da arena
+        int arenaX = (gameScreenWidth - width) / 2;
+        int arenaY = gameScreenYoffset;
 
+        // Calcula a largura e a altura da arena considerando o tamanho do border
+        int arenaWidth = width;
+        int arenaHeight = gameScreenLength;
+
+        // Desenha um retângulo ao redor da área de jogo
+        textGraphics.setBackgroundColor(TextColor.Factory.fromString("#000000"));
+        textGraphics.setForegroundColor(TextColor.ANSI.WHITE);
+        textGraphics.drawLine(new TerminalPosition(arenaX - 1, arenaY - 1),
+                new TerminalPosition(arenaX + arenaWidth, arenaY - 1), '#');
+        textGraphics.drawLine(new TerminalPosition(arenaX - 1, arenaY),
+                new TerminalPosition(arenaX - 1, arenaY + arenaHeight), '#');
+        textGraphics.drawLine(new TerminalPosition(arenaX + arenaWidth, arenaY),
+                new TerminalPosition(arenaX + arenaWidth, arenaY + arenaHeight), '#');
+        textGraphics.drawLine(new TerminalPosition(arenaX - 1, arenaY + arenaHeight),
+                new TerminalPosition(arenaX + arenaWidth, arenaY + arenaHeight), '#');
+    }
+
+
+    private void drawMovingPiece(TextGraphics textGraphics, int gameScreenWidth, int gameScreenXoffset, int gameScreenYoffset) {
+        if (model != null) {
+            String[][] matrix = model.getMatrix();
+            int posX = model.getPos_x();
+            int posY = model.getPos_y();
+
+            for (int y = 0; y < matrix.length; y++) {
+                for (int x = 0; x < matrix[y].length; x++) {
+                    if (!"#000000".equals(matrix[y][x])) {
+                        textGraphics.setBackgroundColor(TextColor.Factory.fromString(matrix[y][x]));
+                        // Calcular a posição centralizada no eixo X
+                        int centerX = gameScreenXoffset + (gameScreenWidth - width) / 2 + posX;
+                        textGraphics.putString(new TerminalPosition(centerX + x, gameScreenYoffset + posY + y), " ");
+                    }
+                }
+            }
+        }
+    }
+
+    private void drawPlacedPieces(TextGraphics textGraphics, int gameScreenXoffset, int gameScreenYoffset) {
+        String[][] matrix = getMatrix();
+        for (int y = 0; y < matrix.length; y++) {
+            for (int x = 0; x < matrix[y].length; x++) {
+                if (!"#000000".equals(matrix[y][x])) {
+                    textGraphics.setBackgroundColor(TextColor.Factory.fromString(matrix[y][x]));
+                    textGraphics.putString(new TerminalPosition(gameScreenXoffset + x, gameScreenYoffset + y), " ");
+                }
+            }
+        }
+    }
 
     public boolean isRunning() {
         return isRunning;
+    }
+    public Piece getModel() {
+        return model;
+    }
+
+    public void setModel(Piece model) {
+        this.model = model;
     }
 
     public void setRunning(boolean running) {

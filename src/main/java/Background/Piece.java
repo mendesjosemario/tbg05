@@ -6,6 +6,11 @@ import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 public class Piece {
@@ -14,9 +19,9 @@ public class Piece {
     private Background.PieceStates.PieceState state;
     private String[][] matrix;
 
-    public Piece(int pos_x, int pos_y){
+    public Piece(int pos_x){
         this.pos_x = pos_x;
-        this.pos_y = pos_y;
+        this.pos_y = 0;
 
         getRandomState();
 
@@ -30,15 +35,17 @@ public class Piece {
         this.pos_y = getPos_y();
     }
 
-    public void draw(TextGraphics screen, GameController gameController){
-        update();
-        screen.setBackgroundColor(TextColor.Factory.fromString(state.getColor()));
+    public void draw(TextGraphics screen) {
+        if (matrix != null) {
+            for (int y = 0; y < matrix.length; y++) {
+                for (int x = 0; x < matrix[y].length; x++) {
+                    if (matrix[y][x].length() != 0) {  // Se for um bloco da peça
+                        // Defina a cor do bloco com base no PieceState
+                        screen.setBackgroundColor(TextColor.Factory.fromString(state.getColor()));
 
-        for (int y = 0; y < matrix.length; y++) {
-            for (int x = 0; x < matrix[y].length * 2; x += 2) {
-                if (!"#000000".equals(matrix[y][x / 2])){
-                    screen.putString(new TerminalPosition(pos_x * 2 + x + gameController.getGameScreenXoffset(), pos_y + y + gameController.getGameScreenYoffset()), " ");
-                    screen.putString(new TerminalPosition(pos_x * 2 + x + 1 + gameController.getGameScreenXoffset(), pos_y + y + gameController.getGameScreenYoffset()), " ");
+                        // Desenhe o bloco na posição (pos_x + x, pos_y + y)
+                        screen.putString(new TerminalPosition(pos_x + x, pos_y + y), " ");
+                    }
                 }
             }
         }
@@ -56,7 +63,9 @@ public class Piece {
 
     public void moveLeft(){ pos_x-=1; }
     public void moveRight(){ pos_x+=1; }
-    public void forceDown(){ pos_y++; }
+    public void forceDown() {
+                pos_y++;
+    }
 
     public int getRightPos(){
         return pos_x + matrix[0].length -1;
