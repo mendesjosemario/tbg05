@@ -72,7 +72,7 @@ public class GameController {
 
             //Game Logic
             if (game.isPieceNull()) {
-                pieceview = new Piece(game.getPiece().pos_x);
+                pieceview = new Piece(game.getPiece().pos_x, game.getPiece().pos_y);
                 nextPieceView = new NextPiece(game.getNextPiece());
             }
             game.nextTick();
@@ -103,7 +103,7 @@ public class GameController {
 
         scoreView.draw(screenGraphics);
         nextPieceView.draw(screenGraphics);
-        boardview.drawArena(screen, this);
+        boardview.drawArena(screen.newTextGraphics(), screen, this);
         pieceview.draw(screenGraphics, this);
 
         screen.refresh();

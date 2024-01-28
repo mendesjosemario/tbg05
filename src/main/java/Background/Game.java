@@ -12,8 +12,6 @@ import com.googlecode.lanterna.terminal.Terminal;
 import java.io.IOException;
 
 
-
-
 public class Game {
     public TerminalHandler getTerminalHandler() {
         return terminalHandler;
@@ -49,8 +47,8 @@ public class Game {
 
     private  final int gameScreenXoffset = 6;
     private  final int gameScreenYoffset = 2;
-    private  final int gameScreenWidth = 26;
-    private final int gameScreenLength = 26;
+    private  final int gameScreenWidth = 100;
+    private final int gameScreenLength = 65;
     private final int gameSpeed = 5;  //smaller is faster, ticks needed to force piece down
     private int nTickCounter = 0;
     private final Score score;
@@ -62,6 +60,7 @@ public class Game {
         this.screen = new TerminalScreen(terminal);
         this.gameController = new GameController(screen, this);
         this.score = new Score();
+        this.piece = arena.getModel();
         currentState = GameState.MENU;
         screen.startScreen();
     }
@@ -80,9 +79,8 @@ public class Game {
                     handleGameplayInput();
                 }
                 case PLAYING -> {
-                    screen.clear();
                     arena.setRunning(true);
-                    arena.drawArena(screen, gameController);
+                    arena.drawArena(screen.newTextGraphics(), screen ,  gameController);
                     handleGameplayInput();
                 }
                 case PAUSED -> {
@@ -105,10 +103,10 @@ public class Game {
     private void drawMenu() throws IOException {
         TextGraphics textGraphics = screen.newTextGraphics();
         textGraphics.setForegroundColor(TextColor.ANSI.WHITE);
-        textGraphics.putString(10, 5, "TETRIS", SGR.BOLD);
-        textGraphics.putString(10, 7, "1. Jogar");
-        textGraphics.putString(10, 8, "2. Instruções");
-        textGraphics.putString(10, 9, "Q. Sair");
+        textGraphics.putString(30, 5, "TETRIS\n", SGR.BOLD);
+        textGraphics.putString(30, 7, "1. Jogar");
+        textGraphics.putString(30, 8, "2. Instrucoes");
+        textGraphics.putString(30, 9, "Q. Sair");
         screen.refresh();
     }
 
@@ -117,12 +115,12 @@ public class Game {
     private void drawInstructions() throws IOException {
         TextGraphics textGraphics = screen.newTextGraphics();
         textGraphics.setForegroundColor(TextColor.ANSI.WHITE);
-        textGraphics.putString(10, 5,  "             Instruções do Jogo", SGR.BOLD);
-        textGraphics.putString(10, 7,  "Seta Esquerda:       Mover para esquerda");
-        textGraphics.putString(10, 8,  "Seta Direita:        Mover para direita");
-        textGraphics.putString(10, 9,  "Seta Cima:           Rotacionar");
-        textGraphics.putString(10, 10, "Seta Baixo:          Dobrar velocidade");
-        textGraphics.putString(10, 11, "Esc:                 Voltar ao menu");
+        textGraphics.putString(10, 5,  "             Instrucoes do Jogo\n", SGR.BOLD);
+        textGraphics.putString(10, 7,  "Seta Esquerda:          Mover para esquerda");
+        textGraphics.putString(10, 8,  "Seta Direita:           Mover para direita");
+        textGraphics.putString(10, 9,  "Seta Cima:              Rotacionar");
+        textGraphics.putString(10, 10, "Seta Baixo:             Dobrar velocidade");
+        textGraphics.putString(10, 11, "Esc:                    Voltar ao menu");
         screen.refresh();
     }
 
@@ -148,28 +146,40 @@ public class Game {
             // Adicionar lógica para outras teclas durante o jogo
         }
     }
-    public void nextTick(){
+    public void nextTick() {
         score.addToScore(arena.checkLineCompletition(new RemoveLine()));
+
         if (nTickCounter == gameSpeed) {
-            if (arena.hasHitBottom(piece))
-                piece = null;
-            else
-                piece.forceDown();
+            if (arena.hasHitBottom(piece)) {
+                piece = createNewPiece(); // Criar uma nova peça
+            } else {
+                piece.forceDown(); // Mover a peça para baixo
+            }
             nTickCounter = 0;
         } else {
             nTickCounter++;
         }
     }
+
+
+    private Piece createNewPiece() {
+        piece = new Piece(gameScreenWidth/2, gameScreenLength/2);
+        return piece;
+    }
+
+
+
+
     public boolean isPieceNull(){
         if(nextPiece == null && piece == null){
-            piece = new Piece(gameScreenWidth/4);
-            nextPiece = new Piece(gameScreenWidth/4);
+            piece = new Piece(gameScreenWidth/4, gameScreenLength/4);
+            nextPiece = new Piece(gameScreenWidth/4, gameScreenLength/4);
             return true;
         }
         if (piece == null) {
             piece = nextPiece;
             nextPiece = null;
-            nextPiece = new Piece(gameScreenWidth/4);
+            nextPiece = new Piece(gameScreenWidth/4, gameScreenLength/4);
             return true;
         }
         return false;

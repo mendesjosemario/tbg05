@@ -34,14 +34,14 @@ public class NextPiece {
         //screenGraphics.putString(45, 4, "| .` | _| >  <  | | ");
         //screenGraphics.putString(45, 5, "|_|\\_|___/_/\\_\\ |_|");
         drawText(screenGraphics,49,5,"NEXT PIECE:","#FFFFFF");
-        screenGraphics.setBackgroundColor(TextColor.Factory.fromString("#000000"));
+        screenGraphics.setBackgroundColor(TextColor.Factory.fromString("#33FFFF"));
         screenGraphics.fillRectangle(new TerminalPosition(45, 7), new TerminalSize(20, 10), ' ');
 
         screenGraphics.setBackgroundColor(TextColor.Factory.fromString(state.getColor()));
 
         for (int y = 0; y < matrix.length; y++) {
             for (int x = 0; x < matrix[y].length * 2; x += 2) {
-                if (matrix[y][x / 2] != "#000000") {
+                if (matrix[y][x / 2] != "#FFFF33") {
                     screenGraphics.putString(new TerminalPosition(52+x , 11+y)," ");
                     screenGraphics.putString(new TerminalPosition(52+x+1, 11+y), " ");                }
             }

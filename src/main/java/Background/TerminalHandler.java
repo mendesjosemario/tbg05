@@ -8,7 +8,7 @@ import com.googlecode.lanterna.terminal.Terminal;
 import java.io.IOException;
 
 public class TerminalHandler {
-    private Terminal terminal;
+    private final Terminal terminal;
 
     public TerminalHandler() throws IOException {
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory();

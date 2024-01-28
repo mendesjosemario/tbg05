@@ -11,12 +11,22 @@ import com.googlecode.lanterna.screen.Screen;
 import java.io.IOException;
 
 public class Arena {
+    public Piece getModel() {
+        return model;
+    }
+
+    public void setModel(Piece model) {
+        this.model = model;
+    }
+
+    private Piece model;
     private String[][] matrix;
     private int width;
     private int length;
     private boolean isRunning=false;
 
     public Arena(int width, int length){
+        this.model = new Piece(width, 0);
         width = width/2;
         this.width = width;
         this.length = length;
@@ -91,7 +101,7 @@ public class Arena {
     public void addPiece(Piece piece){
         for(int y =0; y<piece.getMatrix().length;y++){
             for(int x=0; x<piece.getMatrix()[y].length;x++){
-                if(piece.getMatrix()[y][x] != "#000000"){
+                if(piece.getMatrix()[y][x] != "#00000"){
                     matrix[y+piece.getPos_y()][x+ piece.getPos_x()] = piece.getMatrix()[y][x];
                 }
             }
@@ -144,63 +154,41 @@ public class Arena {
         return false;
     }
 
-    public void addTetromino(Tetrominos.Tetromino tetromino) {
-        // Adiciona o tetromino na arena
-    }
 
-    public void removeTetromino(Tetrominos.Tetromino tetromino) {
-        // Remove o tetromino da arena
-    }
 
     public boolean isPositionOccupied(int x, int y) {
         // Verifica se a posição (x, y) está ocupada
         return false;
     }
+    public void update(){
+        this.matrix = model.getMatrix();
+        this.length = model.getLength();
+    }
+    public void drawArena(TextGraphics textGraphics, Screen screen, GameController gameController) throws IOException {
+        textGraphics = screen.newTextGraphics();
+        textGraphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
+        textGraphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width*2, length*2),' ');
+        textGraphics.setForegroundColor(TextColor.ANSI.GREEN);
 
-    public void drawArena(Screen screen, GameController gameController) throws IOException {
-        TerminalSize size = screen.getTerminalSize();
-        int arenaWidth = 60;
-        int arenaHeight = 30;
 
-        int startX = (size.getColumns() - arenaWidth) / 2;
-        int startY = (size.getRows() - arenaHeight) / 2;
-
-        TextGraphics textGraphics = screen.newTextGraphics();
-        textGraphics.setForegroundColor(TextColor.ANSI.WHITE);
-
-        // ASCII Art de "TETRIS"
-        String[] asciiArt = {
-                "   _______   ______   _______   _____    _____    _____ ",
-                "   |__   __| |  ____| |__   __| |  __ \\  |_   _|  / ____|",
-                "      | |    | |__       | |    | |__) |   | |   | (___    ",
-                "      | |    |  __|      | |    |  _  /    | |    \\___ \\ ",
-                "      | |    | |____     | |    | | \\ \\   _| |_   ____) |",
-                "      |_|    |______|    |_|    |_|  \\_\\ |_____| |_____/"
-        };
-
-        for (int i = 0; i < asciiArt.length; i++) {
-            textGraphics.putString(startX, startY - asciiArt.length - 1 + i, asciiArt[i]);
-        }
-        for (int y = 0; y < length; y++){
-            for (int x = 0; x < width*2; x+=2){
-                textGraphics.setBackgroundColor(TextColor.Factory.fromString(matrix[y][x/2]));
-                //TODO REMOVE LINE (on to debug)
-                textGraphics.putString(new TerminalPosition(x + gameController.getGameScreenXoffset(), y + gameController.getGameScreenYoffset()), " ");
-                textGraphics.putString(new TerminalPosition(x+1 + gameController.getGameScreenXoffset(), y + gameController.getGameScreenYoffset()), " ");
+        // Desenha os blocos estáticos da arena
+        for (int y = 0; y < length; y++) {
+            for (int x = 0; x < width; x++) {
+                String colorCode = matrix[y][x];
+                textGraphics.setBackgroundColor(TextColor.Factory.fromString(colorCode));
+                textGraphics.putString(new TerminalPosition(y*2, x*2), "  ");
             }
         }
 
-        // Desenha a borda da arena
-        for (int x = 0; x < arenaWidth; x++) {
-            for (int y = 0; y < arenaHeight; y++) {
-                if (x == 0 || y == 0 || x == arenaWidth - 1 || y == arenaHeight - 1) {
-                    textGraphics.putString(startX + x, startY + y, "||");
-                }
-            }
+        // Desenha a peça atual
+        if (model != null) {
+            model.draw(textGraphics, gameController);
         }
 
         screen.refresh();
     }
+
+
     public boolean isRunning() {
         return isRunning;
     }

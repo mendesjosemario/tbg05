@@ -14,9 +14,9 @@ public class Piece {
     private Background.PieceStates.PieceState state;
     private String[][] matrix;
 
-    public Piece(int pos_x){
+    public Piece(int pos_x, int pos_y){
         this.pos_x = pos_x;
-        pos_y = 0;
+        this.pos_y = pos_y;
 
         getRandomState();
 
@@ -77,5 +77,17 @@ public class Piece {
     public Background.PieceStates.PieceState getState() {
         return state;
     }
+
+    public int getLength() {
+        return matrix.length;
+    }
+    public boolean isBlockAt(int x, int y) {
+        if (x >= 0 && x < matrix[0].length && y >= 0 && y < matrix.length) {
+            // Verifica se há um bloco na posição (x, y) da matriz da peça
+            return !"#000000".equals(matrix[y][x]);
+        }
+        return false; // Fora dos limites da matriz da peça
+    }
+
 
 }
