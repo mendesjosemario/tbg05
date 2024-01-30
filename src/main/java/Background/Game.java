@@ -30,9 +30,9 @@ public class Game {
     private  NextPiece nextPiece;
     private  final int gameScreenXoffset = 2;
     private  final int gameScreenYoffset = 2;
-    private  final int gameScreenWidth = 100;
-    private final int gameScreenLength = 65;
-    private final int gameSpeed = 5;  //smaller is faster, ticks needed to force piece down
+    private  final int gameScreenWidth = 80;
+    private final int gameScreenLength = 40;
+    private final int gameSpeed = 160;  //Temp de espera ate a proxima peca cair
     private int nTickCounter = 0;
 
     public Score getScore() {
@@ -45,11 +45,11 @@ public class Game {
         return arena;
     }
 
-    private final Arena arena;
+    private Arena arena;
     public Game(TerminalHandler terminalHandler) throws IOException {
         this.terminalHandler = terminalHandler;
         Terminal terminal = terminalHandler.getTerminal();
-        this.arena = new Arena(gameScreenWidth, gameScreenLength, gameScreenXoffset,gameScreenYoffset);
+        this.arena = new Arena(30, 30);
         this.screen = new TerminalScreen(terminal);
         this.score = new Score();
         currentState = GameState.MENU;
@@ -71,11 +71,23 @@ public class Game {
                 }
                 case PLAYING -> {
                     screen.clear();
+                    gameOver();
                     arena.setRunning(true);
                     arena.update();
-                    arena.drawArena(screen, gameScreenXoffset, gameScreenWidth, gameScreenYoffset, gameScreenLength);
+                    score.draw(screen.newTextGraphics());
+                    if (nextPiece != null){
+                        nextPiece.draw(screen.newTextGraphics());
+                    }
+                    arena.drawArena(screen);
+                    screen.refresh();
+                    if(isPieceNull()) continue;
                     nextTick();  // Adicione esta linha para avançar o jogo
                     handleGameplayInput();
+                }
+                case GAME_OVER -> {
+                    screen.clear();
+                    drawGameOverMenu();
+                    handleGameOverInput();
                 }
                 case PAUSED -> {
                     screen.clear();
@@ -104,6 +116,33 @@ public class Game {
         textGraphics.putString(30, 9, "Q. Sair");
         screen.refresh();
     }
+
+    private void drawGameOverMenu() throws IOException {
+        TextGraphics textGraphics = screen.newTextGraphics();
+        textGraphics.setForegroundColor(TextColor.ANSI.WHITE);
+        textGraphics.putString(30, 5, "GAME OVER", SGR.BOLD);
+        textGraphics.putString(30, 7, "R. Restart Game");
+        textGraphics.putString(30, 8, "Q. Quit Game");
+        screen.refresh();
+    }
+    private void handleGameOverInput() throws IOException {
+        KeyStroke key = terminalHandler.getKeyPress();
+        if (key != null && key.getKeyType() == KeyType.Character) {
+            switch (key.getCharacter()) {
+                case 'r', 'R' -> restartGame();
+                case 'q', 'Q' -> quitGame();
+            }
+        }
+    }
+    private void restartGame() throws IOException {
+        arena = new Arena(30 , 30); // Reinicia a arena
+        score.setScore(0); // Reinicia a pontuação, supondo que você tenha um método reset
+        currentState = GameState.PLAYING; // Muda o estado do jogo para jogar
+    }
+    private void quitGame() {
+        currentState = GameState.QUIT;
+    }
+
 
     public void update() {
         arena.update();
@@ -173,7 +212,7 @@ public class Game {
         }
     }
     private Piece createNewPiece() {
-        int initialX = (gameScreenWidth - arena.getWidth()) / 2;
+        int initialX = (arena.getWidth()) / 2;
         arena.setModel(new Piece(initialX));
         return arena.getModel();
     }
@@ -197,8 +236,12 @@ public class Game {
             arena.getModel().moveLeft();
     }
     public void pressedRight(){
-        if (arena.getModel()!=null && arena.getModel().getRightPos()<gameScreenWidth/2-1 && arena.canMove(arena.getModel().getPos_x()+1, arena.getModel()))
+        if (arena.getModel() != null &&
+                arena.getModel().getPos_x() + arena.getModel().getMatrix()[0].length < arena.getWidth() &&
+                arena.canMove(arena.getModel().getPos_x() + 1, arena.getModel())) {
             arena.getModel().moveRight();
+        }
+
     }
     public int getGameScreenLength() {
         return gameScreenLength;
@@ -222,7 +265,7 @@ public class Game {
         if(arena.hasHitBottom(arena.getModel()))
             arena.setModel(null);
         else
-            arena.getModel().forceDown();
+            arena.getModel().moveDown();
         nTickCounter = 0;
     }
     public void pressedUp(){
@@ -240,7 +283,11 @@ public class Game {
         return arena;
     }
 
-    public boolean gameOver(){return arena.gameOver();}
+    public void  gameOver(){
+        if (arena.gameOver()) {
+            currentState = GameState.GAME_OVER;
+        }
+    }
 
 
 }

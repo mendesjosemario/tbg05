@@ -29,7 +29,7 @@ public class NextPiece {
 
     public void draw(TextGraphics screenGraphics) {
         // Desenha o retângulo ao redor da próxima peça
-        screenGraphics.setBackgroundColor(TextColor.Factory.fromString("#33FFFF"));
+        screenGraphics.setBackgroundColor(TextColor.Factory.fromString("#000000"));
         screenGraphics.fillRectangle(new TerminalPosition(45, 7), new TerminalSize(20, 10), ' ');
 
         // Desenha o texto "NEXT PIECE"
@@ -45,7 +45,7 @@ public class NextPiece {
 
             for (int y = 0; y < matrix.length; y++) {
                 for (int x = 0; x < matrix[y].length * 2; x += 2) {
-                    if (!"#FFFF33".equals(matrix[y][x / 2])) {
+                    if (!"#000000".equals(matrix[y][x / 2])) {
                         screenGraphics.putString(new TerminalPosition(52 + x, 11 + y), " ");
                         screenGraphics.putString(new TerminalPosition(52 + x + 1, 11 + y), " ");
                     }

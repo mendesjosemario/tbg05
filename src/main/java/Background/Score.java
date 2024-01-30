@@ -5,7 +5,12 @@ import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 
 public class Score {
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     private int score;
+
 
 
     public Score(){

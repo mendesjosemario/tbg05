@@ -16,13 +16,16 @@ import java.util.concurrent.TimeUnit;
 public class Piece {
     public int pos_x;
     public int pos_y;
+
+    private long lastMoveTime; // Armazena a última vez que a peça se moveu para baixo
+    private static final long MOVE_DOWN_INTERVAL = 200; // 0.2 segundos em milissegundos
     private Background.PieceStates.PieceState state;
     private String[][] matrix;
 
     public Piece(int pos_x){
         this.pos_x = pos_x;
-        this.pos_y = 0;
-
+        this.pos_y = 1;
+        this.lastMoveTime = System.currentTimeMillis();
         getRandomState();
 
         matrix = state.getMatrix();
@@ -64,8 +67,13 @@ public class Piece {
     public void moveLeft(){ pos_x-=1; }
     public void moveRight(){ pos_x+=1; }
     public void forceDown() {
-                pos_y++;
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastMoveTime >= MOVE_DOWN_INTERVAL) {
+            pos_y += 1;
+            lastMoveTime = currentTime; // Atualiza o tempo da última descida
+        }
     }
+    public void moveDown(){ pos_y+=1; }
 
     public int getRightPos(){
         return pos_x + matrix[0].length -1;
@@ -77,6 +85,9 @@ public class Piece {
         return pos_y;
     }
     public String[][] getMatrix() {
+        if (matrix == null) {
+            return null;
+        }
         return matrix;
     }
     public void setState(Background.PieceStates.PieceState state) {
