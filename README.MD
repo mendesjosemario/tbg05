@@ -42,8 +42,6 @@ Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
 - Email de Estudante: <a040866@umaia.pt>
 
 ## Agradecimentos
-<<<<<<< HEAD
+
 - Às pessoas envolvidas que se mostraram e estiveram sempre disponíveis para me ajudar, independentemente dos motivos e causas adjacentes, o meu Muito Obrigado!
-=======
-- Às pessoas envolvidas que se mostraram e estiveram sempre disponíveis para me ajudar, independentemente dos motivos e causas adjacentes, o meu Muito Obrigado!
->>>>>>> 4a9da0bbf4051608e7b59c51227f4d4dcc6c8fb7
+
