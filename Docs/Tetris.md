@@ -1,128 +1,31 @@
-# Tetris - Programação Orientada a Objetos
+# Tetris - Programação Orientada a Objectos
 
 ## Descrição
-Este projeto é uma implementação do clássico jogo Tetris, realizada como parte da disciplina de Programação Orientada a Objetos. O foco está em aplicar os princípios de programação orientada a objetos e desenvolver habilidades em Java, particularmente em relação à construção de interfaces gráficas e lógica de jogo.
+Este projecto insere-se no âmbito da disciplina de Programação Orientada a Objectos e visa a recriação do icónico jogo Tetris. A ênfase recai sobre a aplicação dos conceitos de programação orientada a objectos e o aprimoramento das competências em Java, com um foco especial no desenvolvimento de interfaces gráficas e na mecânica do jogo.
 
 Desenvolvido por: **Jose Mendes** (a040866@umaia.pt)
 
 ## Funcionalidades Implementadas
-- Estrutura de projeto base em Java com organização inicial dos diretórios.
-- Configuração inicial do ambiente de desenvolvimento e do sistema de build usando Gradle.
-- Criação de esqueletos iniciais para as classes principais do jogo (ainda sem implementação de lógica específica).
+- Configuração inicial da estrutura base do projecto em Java, juntamente com a organização preliminar dos directorios.
+- Definição do ambiente de desenvolvimento e do sistema de build, recorrendo ao Gradle.
+- Construção das estruturas básicas para as classes fundamentais do jogo (sem implementação detalhada da lógica de jogo).
 
-## Funcionalidades Planeadas
-- Implementação da lógica de movimentação e rotação das peças do Tetris.
-- Desenvolvimento da lógica para eliminação de linhas e pontuação.
-- Criação da interface gráfica do usuário para interação com o jogo.
-- Adição de controles para o usuário (teclado ou mouse).
-
-## Arquitetura do Projeto
-O projeto segue o padrão MVC (Model-View-Controller), dividindo a lógica do jogo, a interface do usuário e o controle do jogo em partes separadas e interconectadas.
-
+## Funcionalidades Previstas
+- Desenvolvimento da lógica para a movimentação e rotação das peças de Tetris.
+- Elaboração da mecânica para a eliminação de linhas completas e sistema de pontuação.
+- Design e implementação da interface gráfica, permitindo a interacção do utilizador com o jogo.
+- Inserção de controlos de jogo para o utilizador, seja via teclado ou rato.
 
 ### Diagrama de Classes
 
-![Tetris UML Class Diagram](https://github.com/mendesjosemario/tbg05/blob/main/Docs/IMG/Diagrama_ER.PNG)
+![Diagrama UML das Classes do Tetris](https://github.com/mendesjosemario/tbg05/blob/main/Docs/IMG/Tetris%20_Interface.PNG)
 
-
-### Estrutura de Diretórios
-
-```bash
-directory_structure = """
-├───.gradle
-│   ├───7.4
-│   │   ├───checksums
-│   │   ├───dependencies-accessors
-│   │   ├───executionHistory
-│   │   ├───fileChanges
-│   │   ├───fileHashes
-│   │   └───vcsMetadata
-│   ├───buildOutputCleanup
-│   └───vcs-1
-├───.idea
-│   ├───codeStyles
-│   ├───inspectionProfiles
-│   └───modules
-│       └───app
-├───.run
-├───app
-│   ├───build
-│   │   ├───classes
-│   │   │   └───java
-│   │   │       ├───main
-│   │   │       │   └───Tetris
-│   │   │       │       ├───controller
-│   │   │       │       ├───model
-│   │   │       │       └───view
-│   │   │       └───test
-│   │   │           └───Tetris
-│   │   ├───distributions
-│   │   ├───generated
-│   │   │   └───sources
-│   │   │       ├───annotationProcessor
-│   │   │       │   └───java
-│   │   │       │       ├───main
-│   │   │       │       └───test
-│   │   │       └───headers
-│   │   │           └───java
-│   │   │               ├───main
-│   │   │               └───test
-│   │   ├───libs
-│   │   ├───reports
-│   │   │   └───tests
-│   │   │       └───test
-│   │   │           ├───classes
-│   │   │           ├───css
-│   │   │           ├───js
-│   │   │           └───packages
-│   │   ├───resources
-│   │   │   ├───main
-│   │   │   └───test
-│   │   ├───scripts
-│   │   ├───test-results
-│   │   │   └───test
-│   │   │       └───binary
-│   │   └───tmp
-│   │       ├───compileJava
-│   │       ├───compileTestJava
-│   │       ├───jar
-│   │       └───test
-│   └───src
-│       ├───main
-│       │   ├───java
-│       │   │   └───Tetris
-│       │   │       ├───controller
-│       │   │       ├───model
-│       │   │       └───view
-│       │   └───resources
-│       └───test
-│           ├───java
-│           │   └───Tetris
-│           └───resources
-├───build
-│   ├───classes
-│   │   └───java
-│   ├───distributions
-│   ├───libs
-│   ├───resources
-│   ├───scripts
-│   └───tmp
-│       └───jar
-├───Docs
-│   └───IMG
-└───gradle
-└───wrapper
-"""
-```
-## Tecnologias Utilizadas
+## Tecnologias Empregues
 - Java
-- Gradle para gestao de dependências e build
+- Gradle para gestão de dependências e compilação
 
-## Como Executar
-Instruções para clonar o repositório, compilar e executar o jogo (a serem adicionadas conforme o avanço do desenvolvimento).
+## Cronologia ##
+- Ao longo do desenvolvimento, o projecto foi objecto de múltiplas modificações reflectidas nos ![Commits](https://github.com/mendesjosemario/tbg05/commits/main/), em resposta às necessidades intrínsecas do jogo e na busca por cumprir os requisitos essenciais para a fidelidade ao jogo original.
 
 ## Licença
-Informações sobre a licença do projeto.
-
-## Status do Projeto
-O projeto está em desenvolvimento ativo. Ainda não há uma versão funcional disponível.
+Detalhes sobre a licença sob a qual o projecto é disponibilizado.
