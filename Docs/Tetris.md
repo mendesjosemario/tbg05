@@ -18,7 +18,7 @@ Desenvolvido por: **Jose Mendes** (a040866@umaia.pt)
 
 ### Diagrama de Classes
 
-![Diagrama UML das Classes do Tetris](https://github.com/mendesjosemario/tbg05/blob/main/Docs/IMG/Tetris%20_Interface.PNG)
+![Diagrama UML das Classes do Tetris](https://github.com/mendesjosemario/tbg05/blob/main/Docs/IMG/DiagramaClasses.png)
 
 ## Tecnologias Empregues
 - Java
